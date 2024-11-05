@@ -71,9 +71,67 @@
                 padding: 0;
                 border-radius: 0;
             }
+
+            /* Dark mode styles */
+            .dark {
+                color: #e5e7eb;
+            }
+            .dark .bg-white {
+                background-color: #1f2937 !important;
+            }
+            .dark .bg-blue-50 {
+                background-color: #1e3a8a !important;
+                color: #e5e7eb;
+            }
+            .dark .text-blue-800 {
+                color: #93c5fd;
+            }
+            .dark .text-gray-800 {
+                color: #e5e7eb;
+            }
+            .dark .text-gray-700 {
+                color: #d1d5db;
+            }
+            .dark .text-gray-600 {
+                color: #9ca3af;
+            }
+            .dark .bg-gray-100 {
+                background-color: #374151 !important;
+            }
+            .dark .text-indigo-700 {
+                color: #a5b4fc;
+            }
+            .dark pre,
+            .dark code {
+                background-color: #1a1a1a;
+                color: #e5e7eb;
+            }
+            .dark .hover\:bg-gray-200:hover {
+                background-color: #4b5563 !important;
+            }
+
+            /* Dark mode print adjustments */
+            @media print {
+                .dark .bg-blue-50,
+                .dark .bg-white,
+                .dark .bg-gray-100 {
+                    background-color: white !important;
+                    color: black !important;
+                }
+                .dark .text-gray-700,
+                .dark .text-gray-800,
+                .dark .text-indigo-700 {
+                    color: black !important;
+                }
+                .dark pre,
+                .dark code {
+                    background-color: #f3f4f6 !important;
+                    color: black !important;
+                }
+            }
         </style>
     </head>
-    <body class="bg-gray-50 min-h-screen">
+    <body class="bg-gray-900 min-h-screen dark">
         <div class="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
             <!-- Header with controls -->
             <div class="print:hidden flex items-center justify-between mb-6">
