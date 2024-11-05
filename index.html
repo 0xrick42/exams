@@ -1,196 +1,421 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Exam Fiche</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
-    <style>
-        @media print {
-            .print-only { display: block !important; }
-            .no-print { display: none !important; }
-            .level-content { display: block !important; }
-            @page { margin: 2cm; }
-            .bg-blue-50 { background-color: transparent !important; }
-            .bg-gray-100 { background-color: transparent !important; }
-            .level { break-inside: avoid; }
-        }
-
-        .icon {
-            width: 20px;
-            height: 20px;
-            display: inline-block;
-            vertical-align: middle;
-            margin-right: 4px;
-        }
-
-        /* Transition for collapsible sections */
-        .level-content {
-            transition: max-height 0.3s ease-out;
-            overflow: hidden;
-        }
-
-        .level-content.collapsed {
-            max-height: 0;
-        }
-    </style>
-</head>
-<body class="bg-gray-50 min-h-screen">
-    <div class="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-        <!-- Header with controls - hidden in print -->
-        <div class="print:hidden flex items-center justify-between mb-6">
-            <h1 class="text-2xl font-bold text-gray-800">Exam Overview</h1>
-            <div class="flex gap-4">
-                <button onclick="expandAll()"
-                        class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                        <path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                    </svg>
-                    <span>Expand All</span>
-                </button>
-                <button onclick="window.print()"
-                        class="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100">
-                    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"></path>
-                        <path d="M6 14h12v8H6z"></path>
-                    </svg>
-                    <span>Print / Save PDF</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Print title - only visible in print -->
-        <div class="hidden print:block text-center mb-8">
-            <h1 class="text-3xl font-bold">Exam Review Guide</h1>
-            <p class="text-gray-600 mt-2">Quick Reference Sheet</p>
-        </div>
-
-        <!-- Rules Section -->
-        <div class="mb-8 p-4 bg-blue-50 print:bg-white print:border-2 print:border-blue-200 rounded-lg">
-            <h2 class="text-xl font-semibold mb-3 text-blue-800">Rules</h2>
-            <ul class="list-disc pl-6">
-                <li class="text-gray-700 mb-2">A random question is picked from each level below.</li>
-                <li class="text-gray-700 mb-2">If you fail the exam, when you retake the exam again, you will restart at Level 1.</li>
-                <li class="text-gray-700 mb-2">There is <strong>No Norminette</strong> in this exam.</li>
-            </ul>
-        </div>
-
-        <!-- Dynamic content will be inserted here by JavaScript -->
-        <div id="levels-container"></div>
-    </div>
-
-    <script>
-        // Exam content data structure
-        const examContent = {
-            'Level 01': {
-                'first word': [
-                    "skip spaces (32 and 9 -> tabs)",
-                    "write what isn't 32 and 9 -> tabs"
-                ],
-                'fizzbuzz': [
-                    "long nb = nbr",
-                    "handle sign and write (-)",
-                    "if nb > 9 putnbr (nb/10)",
-                    "and last putchar nb % 10 + '0'",
-                    "if(i%15 ==0)",
-                    "else if(i&3) et else if(i%5) etc fizz et buzz",
-                    "else write ft_putnbr",
-                    "dont forget the \\n"
-                ],
-                // ... rest of Level 01 content
-            },
-            'Level 02': {
-                'alpha_mirror': [
-                    "if undercase : argv = 90 - argv + 65",
-                    "if uppercase : argv = 122 - argv + 97",
-                    "overall tips, just reversed numbers of the upper and lower case",
-                    "and write the character in the loop",
-                    "\\n"
-                ],
-                // ... rest of Level 02 content
-            },
-            'Level 03': {
-                'epur_str': [
-                    "2 variables : i and space = 0 both",
-                    "skip spaces (space is <= 32)",
-                    "while (av[1][i]) do if space do space = 1",
-                    "if not space if space == 1 write ' ' and continue to write av[1][i]",
-                    "also put space = 0 in the while. i++ and \\n"
-                ],
-                // ... rest of Level 03 content
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Exam Fiche</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
+            rel="stylesheet"
+        />
+        <style>
+            @media print {
+                .print-only {
+                    display: block !important;
+                }
+                .no-print {
+                    display: none !important;
+                }
+                .level-content {
+                    display: block !important;
+                }
+                @page {
+                    margin: 2cm;
+                }
+                .bg-blue-50 {
+                    background-color: transparent !important;
+                }
+                .bg-gray-100 {
+                    background-color: transparent !important;
+                }
+                .level {
+                    break-inside: avoid;
+                }
             }
-        };
 
-        // Function to toggle section visibility
-        function toggleSection(levelId) {
-            const content = document.querySelector(`#${levelId}-content`);
-            const chevron = document.querySelector(`#${levelId}-chevron`);
-            content.classList.toggle('collapsed');
-            chevron.style.transform = content.classList.contains('collapsed') ? 'rotate(0deg)' : 'rotate(90deg)';
-        }
+            .icon {
+                width: 20px;
+                height: 20px;
+                display: inline-block;
+                vertical-align: middle;
+                margin-right: 4px;
+            }
 
-        // Function to expand all sections
-        function expandAll() {
-            document.querySelectorAll('.level-content').forEach(content => {
-                content.classList.remove('collapsed');
-            });
-            document.querySelectorAll('.chevron').forEach(chevron => {
-                chevron.style.transform = 'rotate(90deg)';
-            });
-        }
+            .level-content {
+                transition: max-height 0.3s ease-out;
+                overflow: hidden;
+            }
 
-        // Function to render content
-        function renderContent() {
-            const container = document.getElementById('levels-container');
+            .level-content.collapsed {
+                max-height: 0;
+            }
 
-            Object.entries(examContent).forEach(([level, content]) => {
-                const levelId = level.toLowerCase().replace(/\s+/g, '-');
-                const levelHtml = `
-                    <div class="mb-6 print:mb-8">
-                        <button onclick="toggleSection('${levelId}')"
-                                class="w-full flex items-center justify-between p-4 bg-gray-100 print:bg-white print:border-b-2 rounded-lg hover:bg-gray-200 transition-colors print:hover:bg-white">
-                            <span class="text-xl font-semibold text-gray-800">${level}</span>
-                            <svg id="${levelId}-chevron" class="chevron icon print:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(90deg); transition: transform 0.3s ease">
-                                <path d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </button>
+            code {
+                background-color: #f3f4f6;
+                padding: 0.2em 0.4em;
+                border-radius: 0.25em;
+                font-family: monospace;
+            }
 
-                        <div id="${levelId}-content" class="mt-4 pl-6 level-content">
-                            ${Object.entries(content).map(([exercise, steps]) => `
+            pre {
+                background-color: #f3f4f6;
+                padding: 1em;
+                border-radius: 0.5em;
+                overflow-x: auto;
+                margin: 1em 0;
+                font-family: monospace;
+            }
+
+            pre code {
+                background-color: transparent;
+                padding: 0;
+                border-radius: 0;
+            }
+        </style>
+    </head>
+    <body class="bg-gray-50 min-h-screen">
+        <div class="w-full max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+            <!-- Header with controls -->
+            <div class="print:hidden flex items-center justify-between mb-6">
+                <h1 class="text-2xl font-bold text-gray-800">Exam Overview</h1>
+                <div class="flex gap-4">
+                    <button
+                        onclick="expandAll()"
+                        class="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100"
+                    >
+                        <svg
+                            class="icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            <path
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            ></path>
+                        </svg>
+                        <span>Expand All</span>
+                    </button>
+                    <button
+                        onclick="window.print()"
+                        class="flex items-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100"
+                    >
+                        <svg
+                            class="icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                        >
+                            <path
+                                d="M6 9V2h12v7M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"
+                            ></path>
+                            <path d="M6 14h12v8H6z"></path>
+                        </svg>
+                        <span>Print / Save PDF</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Print title -->
+            <div class="hidden print:block text-center mb-8">
+                <h1 class="text-3xl font-bold">Exam Review Guide</h1>
+                <p class="text-gray-600 mt-2">Quick Reference Sheet</p>
+            </div>
+
+            <!-- Rules Section -->
+            <div
+                class="mb-8 p-4 bg-blue-50 print:bg-white print:border-2 print:border-blue-200 rounded-lg"
+            >
+                <h2 class="text-xl font-semibold mb-3 text-blue-800">Rules</h2>
+                <ul class="list-disc pl-6">
+                    <li class="text-gray-700 mb-2">
+                        This exam has 4 Levels, with 1 question from each level.
+                    </li>
+                    <li class="text-gray-700 mb-2">
+                        A random question is picked from each level below.
+                    </li>
+                    <li class="text-gray-700 mb-2">
+                        If you fail the exam, when you retake the exam again,
+                        you will restart at Level 1.
+                    </li>
+                    <li class="text-gray-700 mb-2">
+                        There is <strong>No Norminette</strong> in this exam.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Dynamic content will be inserted here by JavaScript -->
+            <div id="levels-container"></div>
+        </div>
+
+        <script>
+            // First half of the exam content
+            const examContent = {
+                "Level 01": {
+                    "first word": [
+                        "skip spaces (32 and 9 -> tabs)",
+                        "write what isn't 32 and 9 -> tabs",
+                    ],
+                    fizzbuzz: {
+                        "putnbr (IN THE FIZZBUZZ)": [
+                            "long nb = nbr",
+                            "handle sign and write (-)",
+                            "if nb > 9 putnbr (nb/10)",
+                            "and last putchar nb % 10 + '0'",
+                            "fizzbuzz",
+                            "if(i%15 ==0)",
+                            "else if(i&3) et else if(i%5) etc fizz et buzz blabla",
+                            "else write ft_putnbr",
+                            "dont forget the \\n",
+                        ],
+                    },
+                    "ft_strcpy (char *s1, char *s2)": [
+                        "s1 is the return string, copy s2 into s1 and return it.",
+                        "while(s2)",
+                        "s1 = s2 i",
+                        "s1 = '\\0'",
+                        "return(s1)",
+                    ],
+                    ft_strlen: ["lol"],
+                    repeat_alpha: [
+                        "main argc argv if not 2 \\n return 0",
+                        "int i and count",
+                        "if lowercase count = av[1][i] - 'a' + 1 and for uppercase just 'A'",
+                        "while(count--) write character",
+                        "\\n",
+                    ],
+                },
+                "Level 02": {
+                    alpha_mirror: [
+                        "if undercase : argv = 90 - argv + 65",
+                        "if uppercase : argv = 122 - argv + 97",
+                        "overall tips, just reversed numbers of the upper and lower case",
+                        "and write the character in the loop",
+                        "\\n",
+                    ],
+                    camel_to_snake: [
+                        "if argv is uppercase make it lowercase and write '_'",
+                        "\\n",
+                    ],
+                    snake_to_camel: [
+                        "same as camel_to_snake but the other way around",
+                    ],
+                    do_op: [
+                        "before everything, atoi convert an int to a char",
+                        "if argv [sign index] == sign do :",
+                        "printf (%d, atoi(argv[number 1]) sign atoi(argv [number 2]))",
+                        'printf("\\n")',
+                    ],
+                    ft_atoi: [
+                        'input looks like " --+++-+3275heyhl"',
+                        "3 variables, sign, rez, i",
+                        "skip spaces",
+                        "if str[i] is '-' : sign = -1 and i++",
+                        "while str is a digit : rez = r * 10 + str - '0'",
+                        "return(sign * rez)",
+                    ],
+                    ft_strcmp: [
+                        "while ((s1[i] || s2[i]) && s1[i] == s2[i]) then i++",
+                        "return(s1[i] - s2[i])",
+                    ],
+                    ft_strrev: [
+                        "3 variables, i, j and char tmp",
+                        "play swap in a while i loop and i++, j--",
+                        "return str",
+                    ],
+                    "bits triad": {
+                        print_bits: [
+                            "2 variables : int i = 8 and unsigned char bit",
+                            "while (i--) do : bit = (octet >> i & 1) + 48",
+                            "write(1, &bit, 1)",
+                        ],
+                        reverse_bits: [
+                            "2 variables : unsigned int i = 8 and unsigned char bit",
+                            "while (i--) do :",
+                            "bit = (bit << 1) | (octet & 1); and after octet = octet >> 1",
+                            "return(bit)",
+                        ],
+                        swap_bits: ["return ((octet >> 4 | octet << 4))"],
+                    },
+                },
+                "Level 03": {
+                    epur_str: [
+                        "2 variables : i and space = 0 both",
+                        "skip spaces (space is <= 32)",
+                        "while (av[1][i]) do if space do space = 1",
+                        "if not space if space == 1 write ' ' and continue to write av[1][i]",
+                        "also put space = 0 in the while. i++ and \\n",
+                    ],
+                    expand_str: ["same as epur str unless its 3 spaces"],
+                    paramsum: ["ft_putnbr", "write ac - 1"],
+                    tab_mult: {
+                        "Functions needed": ["ft_atoi, ft_putnbr, ft_putstr"],
+                        "Example Code": [
+                            `
+            int     main(int argc, char *argv[])
+            {
+                if (argc != 2)
+                {
+                    write(1, "\\n", 1);
+                    return(0);
+                }
+
+                int     i;
+                int     nbr;
+
+                    i = 1;
+                    nbr = ft_atoi(argv[1]);
+                    while (i <= 9)
+                    {
+                        ft_putnbr(i);
+                        write(1, " x ", 3);
+                        ft_putnbr(nbr);
+                        write(1, " = ", 3);
+                        ft_putnbr(i * nbr);
+                        write(1, "\\n", 1);
+                        i += 1;
+                }
+                return (0);
+            }`,
+                        ],
+                    },
+                    hidenp: [
+                        "2 variables i and j",
+                        "while av[1][i] && av[2][j] and increment i only when its equal to j",
+                        "if av[1][i] == 0 write 1 else 0",
+                        "\\n",
+                        "Alternative version:",
+                        "2 variables i and j",
+                        "while(av[2][j] && av[1][i]) and if av[1][i] == av[2][j] i++",
+                        "if av[1][i] == 0 write 1 else write 0",
+                        "write \\n and return(0)",
+                    ],
+                },
+            };
+
+            // Functions for interactivity
+            function toggleSection(levelId) {
+                const content = document.querySelector(`#${levelId}-content`);
+                const chevron = document.querySelector(`#${levelId}-chevron`);
+                content.classList.toggle("collapsed");
+                chevron.style.transform = content.classList.contains(
+                    "collapsed",
+                )
+                    ? "rotate(0deg)"
+                    : "rotate(90deg)";
+            }
+
+            function expandAll() {
+                document
+                    .querySelectorAll(".level-content")
+                    .forEach((content) => {
+                        content.classList.remove("collapsed");
+                    });
+                document.querySelectorAll(".chevron").forEach((chevron) => {
+                    chevron.style.transform = "rotate(90deg)";
+                });
+            }
+
+            function renderContent() {
+                const container = document.getElementById("levels-container");
+
+                Object.entries(examContent).forEach(([level, content]) => {
+                    const levelId = level.toLowerCase().replace(/\s+/g, "-");
+                    const levelHtml = `
                                 <div class="mb-6 print:mb-8">
-                                    <h3 class="text-lg font-semibold mb-3 text-indigo-700 print:text-black">${exercise}</h3>
-                                    <ul class="list-disc pl-6">
-                                        ${Array.isArray(steps) ?
-                                            steps.map(step => `
-                                                <li class="text-gray-700 mb-2">${step}</li>
-                                            `).join('') :
-                                            Object.entries(steps).map(([subTitle, subSteps]) => `
-                                                <li class="mb-4">
-                                                    <h4 class="font-medium text-gray-800 mb-2">${subTitle}</h4>
-                                                    <ul class="list-disc pl-6">
-                                                        ${subSteps.map(step => `
-                                                            <li class="text-gray-700 mb-2">${step}</li>
-                                                        `).join('')}
-                                                    </ul>
-                                                </li>
-                                            `).join('')
-                                        }
-                                    </ul>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', levelHtml);
-            });
-        }
+                                    <button onclick="toggleSection('${levelId}')"
+                                            class="w-full flex items-center justify-between p-4 bg-gray-100 print:bg-white print:border-b-2 rounded-lg hover:bg-gray-200 transition-colors print:hover:bg-white">
+                                        <span class="text-xl font-semibold text-gray-800">${level}</span>
+                                        <svg id="${levelId}-chevron" class="chevron icon print:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(90deg); transition: transform 0.3s ease">
+                                            <path d="M9 5l7 7-7 7"></path>
+                                        </svg>
+                                    </button>
 
-        // Initialize the page
-        document.addEventListener('DOMContentLoaded', () => {
-            renderContent();
-            expandAll(); // Start with all sections expanded
-        });
-    </script>
-</body>
+                                    <div id="${levelId}-content" class="mt-4 pl-6 level-content">
+                                        ${Object.entries(content)
+                                            .map(
+                                                ([exercise, steps]) => `
+                                            <div class="mb-6 print:mb-8">
+                                                <h3 class="text-lg font-semibold mb-3 text-indigo-700 print:text-black">${exercise}</h3>
+                                                <ul class="list-disc pl-6">
+                                                    ${
+                                                        Array.isArray(steps)
+                                                            ? steps
+                                                                  .map(
+                                                                      (
+                                                                          step,
+                                                                      ) => `
+                                                            <li class="text-gray-700 mb-2">
+                                                                ${
+                                                                    step
+                                                                        .trim()
+                                                                        .startsWith(
+                                                                            "`",
+                                                                        )
+                                                                        ? `<pre><code>${step.replace(/`/g, "")}</code></pre>`
+                                                                        : step
+                                                                }
+                                                            </li>
+                                                        `,
+                                                                  )
+                                                                  .join("")
+                                                            : Object.entries(
+                                                                  steps,
+                                                              )
+                                                                  .map(
+                                                                      ([
+                                                                          subTitle,
+                                                                          subSteps,
+                                                                      ]) => `
+                                                            <li class="mb-4">
+                                                                <h4 class="font-medium text-gray-800 mb-2">${subTitle}</h4>
+                                                                <ul class="list-disc pl-6">
+                                                                    ${subSteps
+                                                                        .map(
+                                                                            (
+                                                                                step,
+                                                                            ) => `
+                                                                        <li class="text-gray-700 mb-2">
+                                                                            ${
+                                                                                step
+                                                                                    .trim()
+                                                                                    .startsWith(
+                                                                                        "`",
+                                                                                    )
+                                                                                    ? `<pre><code>${step.replace(/`/g, "")}</code></pre>`
+                                                                                    : step
+                                                                            }
+                                                                        </li>
+                                                                    `,
+                                                                        )
+                                                                        .join(
+                                                                            "",
+                                                                        )}
+                                                                </ul>
+                                                            </li>
+                                                        `,
+                                                                  )
+                                                                  .join("")
+                                                    }
+                                                </ul>
+                                            </div>
+                                        `,
+                                            )
+                                            .join("")}
+                                    </div>
+                                </div>
+                            `;
+                    container.insertAdjacentHTML("beforeend", levelHtml);
+                });
+            }
+
+            // Initialize
+            document.addEventListener("DOMContentLoaded", () => {
+                renderContent();
+                expandAll();
+            });
+        </script>
+    </body>
 </html>
